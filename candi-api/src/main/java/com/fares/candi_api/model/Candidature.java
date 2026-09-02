@@ -64,7 +64,6 @@ public class Candidature {
         dateMaj = LocalDateTime.now();
     }
 
-    @PrePersist
     @PreUpdate
     protected void onUpdate() {
         dateMaj = LocalDateTime.now();
