@@ -28,6 +28,7 @@ public class CandidatureService {
 
         Candidature candidature = new Candidature();
         candidature.setDateCreation(LocalDateTime.now());
+        candidature.setDateCandidature(candi.DateCandidature());
         candidature.setEntreprise(candi.entreprise());
         candidature.setDescriptionOffre(candi.description());
         candidature.setLienOffre(candi.lienOffre());
@@ -41,12 +42,65 @@ public class CandidatureService {
 
     }
 
-    public List<CandidatureResponse> getCandidature(String email){
+    public List<CandidatureResponse> getCandidatures(String email){
         Utilisateur utilisateur = utilisateurRepository.findByEmail(email).
                 orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
         List<Candidature> candidatures = candidatureRepository.findAllByUtilisateur(utilisateur);
         return candidatures.stream().map(this::mapToDto).toList();
+    }
+
+    public CandidatureResponse getCandidature(String email, Long id){
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email).
+                orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        Candidature candidature = candidatureRepository.findByIdAndUtilisateur(id, utilisateur)
+                .orElseThrow(() -> new RuntimeException("Candidature non trouvée"));
+
+        return this.mapToDto(candidature);
+    }
+
+    public CandidatureResponse update(Long id, CandidatureRequest candi, String email) {
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        Candidature candidature = candidatureRepository.findByIdAndUtilisateur(id, utilisateur)
+                .orElseThrow(() -> new RuntimeException("Candidature non trouvée"));
+
+        Candidature updatedCandidature = new Candidature();
+        candidature.setDateMaj(LocalDateTime.now());
+        candidature.setDateCandidature(candi.DateCandidature());
+        candidature.setEntreprise(candi.entreprise());
+        candidature.setDescriptionOffre(candi.description());
+        candidature.setLienOffre(candi.lienOffre());
+        candidature.setPoste(candi.poste());
+        candidature.setStatut(candi.status());
+
+        Candidature updated = candidatureRepository.save(candidature);
+        return mapToDto(updated);
+    }
+
+    public void deleteCandidature(String email, Long id){
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email).
+                orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        Candidature candidature = candidatureRepository.findByIdAndUtilisateur(id, utilisateur)
+                .orElseThrow(() -> new RuntimeException("Candidature non trouvée"));
+
+        candidatureRepository.deleteById(id);
+    }
+
+    public void deleteBatch(String email, List<Long> ids){
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email).
+                orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        List<Candidature> candidatures = candidatureRepository.findAllByIdInAndUtilisateur(ids, utilisateur);
+
+        if (candidatures.size() != ids.size()) {
+            throw new RuntimeException("Une ou plusieurs candidatures n'existent pas ou ne vous appartiennent pas");
+        }
+
+        candidatureRepository.deleteAll(candidatures);
     }
 
     private CandidatureResponse mapToDto(Candidature candidature) {

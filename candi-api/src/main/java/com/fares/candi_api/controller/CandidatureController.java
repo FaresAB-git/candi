@@ -2,16 +2,16 @@ package com.fares.candi_api.controller;
 
 import com.fares.candi_api.dto.CandidatureRequest;
 import com.fares.candi_api.dto.CandidatureResponse;
+import com.fares.candi_api.dto.DeleteBatchRequestDto;
+import com.fares.candi_api.model.Candidature;
 import com.fares.candi_api.service.CandidatureService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
 @RequestMapping("/api/candidature")
 public class CandidatureController {
 
@@ -21,19 +21,45 @@ public class CandidatureController {
         this.candidatureService = candidatureService;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<CandidatureResponse> createCandidature(@RequestBody CandidatureRequest candidatureRequest
     , Authentication authentication){
         String email = authentication.getName();
         return ResponseEntity.ok(candidatureService.createCandidature(candidatureRequest, email));
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<CandidatureResponse>> getCandidatures(Authentication authentication){
         String email = authentication.getName();
-        return ResponseEntity.ok(candidatureService.getCandidature(email));
+        return ResponseEntity.ok(candidatureService.getCandidatures(email));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CandidatureResponse> getCandidature(@PathVariable Long id, Authentication authentication){
+        String email = authentication.getName();
+        return ResponseEntity.ok(candidatureService.getCandidature(email, id));
+    }
 
+    @PutMapping("/{id]")
+    public ResponseEntity<CandidatureResponse> updateCandidature(@PathVariable Long id
+        ,@RequestBody CandidatureRequest candidatureRequest
+        ,Authentication authentication){
+        String email = authentication.getName();
+        return ResponseEntity.ok(candidatureService.update(id, candidatureRequest, email));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCandidature(@PathVariable Long id, Authentication authentication){
+        String email = authentication.getName();
+        candidatureService.deleteCandidature(email, id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/batch")
+    public ResponseEntity<Void> deleteBatchCandidature(@RequestBody DeleteBatchRequestDto deleteBatchRequestDto, Authentication authentication){
+        String email = authentication.getName();
+        candidatureService.deleteBatch(email, deleteBatchRequestDto.ids());
+        return ResponseEntity.noContent().build();
+    }
 
 }
