@@ -4,7 +4,9 @@ import com.fares.candi_api.dto.CandidatureRequest;
 import com.fares.candi_api.dto.CandidatureResponse;
 import com.fares.candi_api.dto.DeleteBatchRequestDto;
 import com.fares.candi_api.model.Candidature;
+import com.fares.candi_api.model.StatutCandidature;
 import com.fares.candi_api.service.CandidatureService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,7 @@ public class CandidatureController {
     }
 
     @PostMapping
-    public ResponseEntity<CandidatureResponse> createCandidature(@RequestBody CandidatureRequest candidatureRequest
+    public ResponseEntity<CandidatureResponse> createCandidature(@RequestBody @Valid CandidatureRequest candidatureRequest
     , Authentication authentication){
         String email = authentication.getName();
         return ResponseEntity.ok(candidatureService.createCandidature(candidatureRequest, email));
@@ -42,7 +44,7 @@ public class CandidatureController {
 
     @PutMapping("/{id]")
     public ResponseEntity<CandidatureResponse> updateCandidature(@PathVariable Long id
-        ,@RequestBody CandidatureRequest candidatureRequest
+        ,@RequestBody @Valid CandidatureRequest candidatureRequest
         ,Authentication authentication){
         String email = authentication.getName();
         return ResponseEntity.ok(candidatureService.update(id, candidatureRequest, email));
@@ -60,6 +62,11 @@ public class CandidatureController {
         String email = authentication.getName();
         candidatureService.deleteBatch(email, deleteBatchRequestDto.ids());
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/api/statuts")
+    public ResponseEntity<StatutCandidature[]> getStatuts() {
+        return ResponseEntity.ok(StatutCandidature.values());
     }
 
 }
