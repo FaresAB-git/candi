@@ -49,4 +49,19 @@ public class UtilisateurController {
         String email = authentication.getName();
         return ResponseEntity.ok(utilisateurService.deleteCvBase(email));
     }
+
+    @PostMapping("/me/lettre-base")
+    public ResponseEntity<UtilisateurResponseDto> uploadLettreBase(
+            @RequestParam("file") MultipartFile file,
+            Authentication authentication) {
+
+        String email = authentication.getName();
+        return ResponseEntity.ok(utilisateurService.uploadLettreBase(email, file));
+    }
+
+    @DeleteMapping("/me/lettre-base")
+    public ResponseEntity<UtilisateurResponseDto> deleteLettreBase(Authentication authentication) {
+        String email = authentication.getName();
+        return ResponseEntity.ok(utilisateurService.deleteLettreBase(email));
+    }
 }

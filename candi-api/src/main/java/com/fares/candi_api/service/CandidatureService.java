@@ -7,6 +7,7 @@ import com.fares.candi_api.model.Utilisateur;
 import com.fares.candi_api.repository.CandidatureRepository;
 import com.fares.candi_api.repository.UtilisateurRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,10 +17,12 @@ public class CandidatureService {
 
     private final CandidatureRepository candidatureRepository;
     private final UtilisateurRepository utilisateurRepository;
+    private final StorageService storageService;
 
-    public CandidatureService(CandidatureRepository candidatureRepository, UtilisateurRepository utilisateurRepository) {
+    public CandidatureService(CandidatureRepository candidatureRepository, UtilisateurRepository utilisateurRepository, StorageService storageService) {
         this.candidatureRepository = candidatureRepository;
         this.utilisateurRepository = utilisateurRepository;
+        this.storageService = storageService;
     }
 
     public CandidatureResponse createCandidature(CandidatureRequest candi, String email){
@@ -28,12 +31,13 @@ public class CandidatureService {
 
         Candidature candidature = new Candidature();
         candidature.setDateCreation(LocalDateTime.now());
-        candidature.setDateCandidature(candi.DateCandidature());
+        candidature.setDateCandidature(candi.dateCandidature());
         candidature.setEntreprise(candi.entreprise());
         candidature.setDescriptionOffre(candi.description());
         candidature.setLienOffre(candi.lienOffre());
         candidature.setPoste(candi.poste());
         candidature.setStatut(candi.status());
+        candidature.setNotes(candi.notes());
         candidature.setUtilisateur(utilisateur);
 
         Candidature createdCandi = candidatureRepository.save(candidature);
@@ -67,9 +71,8 @@ public class CandidatureService {
         Candidature candidature = candidatureRepository.findByIdAndUtilisateur(id, utilisateur)
                 .orElseThrow(() -> new RuntimeException("Candidature non trouvée"));
 
-        Candidature updatedCandidature = new Candidature();
         candidature.setDateMaj(LocalDateTime.now());
-        candidature.setDateCandidature(candi.DateCandidature());
+        candidature.setDateCandidature(candi.dateCandidature());
         candidature.setEntreprise(candi.entreprise());
         candidature.setDescriptionOffre(candi.description());
         candidature.setLienOffre(candi.lienOffre());
@@ -103,6 +106,74 @@ public class CandidatureService {
         candidatureRepository.deleteAll(candidatures);
     }
 
+    public CandidatureResponse uploadCv(Long id, String email, MultipartFile file) {
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        Candidature candidature = candidatureRepository.findByIdAndUtilisateur(id, utilisateur)
+                .orElseThrow(() -> new RuntimeException("Candidature non trouvée"));
+
+        if (candidature.getCvUrl() != null) {
+            storageService.delete(candidature.getCvUrl());
+        }
+
+        String newUrl = storageService.upload(file);
+        candidature.setCvUrl(newUrl);
+
+        Candidature updated = candidatureRepository.save(candidature);
+        return mapToDto(updated);
+    }
+
+    public CandidatureResponse deleteCv(Long id, String email) {
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        Candidature candidature = candidatureRepository.findByIdAndUtilisateur(id, utilisateur)
+                .orElseThrow(() -> new RuntimeException("Candidature non trouvée"));
+
+        if (candidature.getCvUrl() != null) {
+            storageService.delete(candidature.getCvUrl());
+            candidature.setCvUrl(null);
+            candidatureRepository.save(candidature);
+        }
+
+        return mapToDto(candidature);
+    }
+
+    public CandidatureResponse uploadLettre(Long id, String email, MultipartFile file) {
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        Candidature candidature = candidatureRepository.findByIdAndUtilisateur(id, utilisateur)
+                .orElseThrow(() -> new RuntimeException("Candidature non trouvée"));
+
+        if (candidature.getLettreUrl() != null) {
+            storageService.delete(candidature.getLettreUrl());
+        }
+
+        String newUrl = storageService.upload(file);
+        candidature.setLettreUrl(newUrl);
+
+        Candidature updated = candidatureRepository.save(candidature);
+        return mapToDto(updated);
+    }
+
+    public CandidatureResponse deleteLettre(Long id, String email) {
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        Candidature candidature = candidatureRepository.findByIdAndUtilisateur(id, utilisateur)
+                .orElseThrow(() -> new RuntimeException("Candidature non trouvée"));
+
+        if (candidature.getLettreUrl() != null) {
+            storageService.delete(candidature.getLettreUrl());
+            candidature.setLettreUrl(null);
+            candidatureRepository.save(candidature);
+        }
+
+        return mapToDto(candidature);
+    }
+
     private CandidatureResponse mapToDto(Candidature candidature) {
         return new CandidatureResponse(
                 candidature.getId(),
@@ -110,7 +181,11 @@ public class CandidatureService {
                 candidature.getPoste(),
                 candidature.getDescriptionOffre(),
                 candidature.getLienOffre(),
+                candidature.getDateCandidature(),
                 candidature.getStatut(),
+                candidature.getNotes(),
+                candidature.getCvUrl(),
+                candidature.getLettreUrl(),
                 candidature.getDateCreation(),
                 candidature.getDateMaj()
         );

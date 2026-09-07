@@ -32,6 +32,21 @@ public class UtilisateurService {
         return this.mapToDto(utilisateur);
     }
 
+    public UtilisateurResponseDto uploadLettreBase(String email, MultipartFile file){
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé "));
+
+        if (utilisateur.getLettreBaseUrl() != null){
+            storageService.delete(utilisateur.getLettreBaseUrl());
+        }
+
+        String url = storageService.upload(file);
+
+        utilisateur.setLettreBaseUrl(url);
+
+        return this.mapToDto(utilisateur);
+    }
+
     public UtilisateurResponseDto deleteCvBase(String email) {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
@@ -39,6 +54,19 @@ public class UtilisateurService {
         if (utilisateur.getCvBaseUrl() != null) {
             storageService.delete(utilisateur.getCvBaseUrl());
             utilisateur.setCvBaseUrl(null);
+            utilisateurRepository.save(utilisateur);
+        }
+
+        return mapToDto(utilisateur);
+    }
+
+    public UtilisateurResponseDto deleteLettreBase(String email) {
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        if (utilisateur.getLettreBaseUrl() != null) {
+            storageService.delete(utilisateur.getLettreBaseUrl());
+            utilisateur.setLettreBaseUrl(null);
             utilisateurRepository.save(utilisateur);
         }
 
