@@ -1,0 +1,14 @@
+.layout{
+  height: 100vh;
+  width: 100%;
+
+}
+
+.mat-card{
+  max-width: 500px;
+  height: 500px;
+  margin-top: 10%;
+  margin-inline: auto;
+}
+
+

@@ -25,8 +25,7 @@ public class CandidatureController {
     }
 
     @PostMapping
-    public ResponseEntity<CandidatureResponse> createCandidature(@RequestBody @Valid CandidatureRequest candidatureRequest
-    , Authentication authentication){
+    public ResponseEntity<CandidatureResponse> createCandidature(@RequestBody @Valid CandidatureRequest candidatureRequest, Authentication authentication){
         String email = authentication.getName();
         return ResponseEntity.ok(candidatureService.createCandidature(candidatureRequest, email));
     }
@@ -44,9 +43,7 @@ public class CandidatureController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CandidatureResponse> updateCandidature(@PathVariable Long id
-        ,@RequestBody @Valid CandidatureRequest candidatureRequest
-        ,Authentication authentication){
+    public ResponseEntity<CandidatureResponse> updateCandidature(@PathVariable Long id,@RequestBody @Valid CandidatureRequest candidatureRequest,Authentication authentication){
         String email = authentication.getName();
         return ResponseEntity.ok(candidatureService.update(id, candidatureRequest, email));
     }
@@ -71,10 +68,7 @@ public class CandidatureController {
     }
 
     @PostMapping("/{id}/cv")
-    public ResponseEntity<CandidatureResponse> uploadCv(
-            @PathVariable Long id,
-            @RequestParam("file") MultipartFile file,
-            Authentication authentication) {
+    public ResponseEntity<CandidatureResponse> uploadCv(@PathVariable Long id, @RequestParam("file") MultipartFile file, Authentication authentication) {
         String email = authentication.getName();
         return ResponseEntity.ok(candidatureService.uploadCv(id, email, file));
     }
@@ -86,10 +80,7 @@ public class CandidatureController {
     }
 
     @PostMapping("/{id}/lettre")
-    public ResponseEntity<CandidatureResponse> uploadLettre(
-            @PathVariable Long id,
-            @RequestParam("file") MultipartFile file,
-            Authentication authentication) {
+    public ResponseEntity<CandidatureResponse> uploadLettre(@PathVariable Long id, @RequestParam("file") MultipartFile file, Authentication authentication) {
         String email = authentication.getName();
         return ResponseEntity.ok(candidatureService.uploadLettre(id, email, file));
     }

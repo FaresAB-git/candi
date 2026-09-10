@@ -1,0 +1,47 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: var(--color-bg-page)}
+
+:root {
+  /* ===== Typographie ===== */
+  --font-heading: 'Libre Franklin', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* ===== Fond & surfaces ===== */
+  --color-bg-page: #ECE7E0;
+  --color-bg-surface: #FBF9F6;
+  --color-bg-field: #F0EBE4;
+  --color-bg-chip: #E2DBD2;
+  --color-border: #DDD4C8;
+
+  /* ===== Texte ===== */
+  --color-text-primary: #2A2420;
+  --color-text-secondary: #5C534C;
+  --color-text-tertiary: #7A7068;
+  --color-text-mono: #8E8478;
+  --color-chevron: #A1968A;
+
+  /* ===== Accent terracotta ===== */
+  --color-accent: oklch(0.55 0.13 40);
+  --color-accent-hex: #B96A4A;
+  --color-accent-dark: oklch(0.44 0.12 40);
+  --color-accent-dark-hex: #8F4E33;
+  --color-accent-soft: oklch(0.55 0.13 40 / 10%);
+
+  /* ===== Boutons principaux ===== */
+  --color-btn-bg: #2A2420;
+  --color-btn-text: #FBF9F6;
+
+  /* ===== Statuts ===== */
+  --color-status-entretien: oklch(0.58 0.13 155);
+  --color-status-entretien-hex: #3F8A63;
+
+  --color-status-relancee: oklch(0.70 0.14 75);
+  --color-status-relancee-hex: #C08A2E;
+
+  --color-status-refusee: oklch(0.58 0.15 25);
+  --color-status-refusee-hex: #BE5C4E;
+
+  --color-status-envoyee: #B3A89C;
+}
