@@ -1,0 +1,23 @@
+<div class="layout">
+  <mat-card class="mat-card">
+    <mat-card-header>
+    </mat-card-header>
+    <mat-card-content >
+      <div class="mat-content" [formGroup]="fgLogin">
+        <h1 class="title"> Ton Suivi </h1>
+        <h3 class="sub-title"> Reprends là où tu t'es arrêté.</h3>
+        <app-input formControlName="email" [label]="'E-mail'" class="input" style="width: 100%;"/>
+        <app-input formControlName="motDePasse" [label]="'Mot de passe'" class="input" style="width: 100%"/>
+        @if (loginError()) {
+          <span class="error">{{ loginError() }}</span>
+        }
+          <button [disabled]="!fgLogin.valid" (click)="login()"> Se connecter </button>
+        <div class="footer">
+          <span> Pas de compte ? </span>
+          <a [routerLink]="'/register'"> Créer un compte </a>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+</div>

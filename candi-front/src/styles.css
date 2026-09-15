@@ -1,7 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: var(--color-bg-page)}
+body { margin: 0;
+  font-family: var(--font-heading), sans-serif; background-color: var(--color-bg-page); color: var(--color-text-primary);  }
 
 :root {
   /* ===== Typographie ===== */
@@ -44,4 +45,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
   --color-status-refusee-hex: #BE5C4E;
 
   --color-status-envoyee: #B3A89C;
+
+  --font-size-label: 12px;
+  --font-size-title: 30px;
 }

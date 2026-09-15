@@ -1,4 +1,3 @@
-
 export enum StatutCandidature {
   A_PREPARER = 'A_PREPARER',
   ENVOYEE = 'ENVOYEE',
@@ -9,8 +8,7 @@ export enum StatutCandidature {
   ABANDONNEE = 'ABANDONNEE',
 }
 
-
-export interface CandidatureResponse {
+export interface CandidatureRequest {
   entreprise: string;
   poste: string;
   description: string | null;
@@ -20,7 +18,7 @@ export interface CandidatureResponse {
   notes: string | null;
 }
 
-export interface CandidatureRequest {
+export interface CandidatureResponse {
   id: number;
   entreprise: string;
   poste: string;

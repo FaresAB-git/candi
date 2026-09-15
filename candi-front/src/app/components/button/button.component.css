@@ -1,0 +1,45 @@
+:host {
+  display: inline-block;
+}
+
+.btn {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.65rem 1.5rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.05s ease;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Variante principale : bouton sombre (Enregistrer) */
+.btn-primary {
+  background-color: var(--color-btn-bg);
+  color: var(--color-btn-text);
+}
+
+/* Variante neutre : bouton clair (Annuler) */
+.btn-neutral {
+  background-color: var(--color-bg-chip);
+  color: var(--color-text-primary);
+}
+
+/* Variante accent : bouton terracotta (Générer) */
+.btn-accent {
+  background-color: var(--color-accent);
+  color: var(--color-bg-surface);
+}

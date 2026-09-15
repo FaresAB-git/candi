@@ -1,0 +1,20 @@
+<div class="layout">
+  <mat-card class="mat-card">
+    <mat-card-header>
+    </mat-card-header>
+    <mat-card-content >
+      <div class="mat-content" [formGroup]="fgLogin">
+        <h1 class="title"> Crée ton compte </h1>
+        <h3 class="sub-title"> Gère tes candidature avec candi </h3>
+        <app-input formControlName="email" [label]="'E-mail'" class="input" style="width: 100%;"/>
+        <app-input formControlName="motDePasse" [label]="'Mot de passe'" class="input" style="width: 100%"/>
+        <button [disabled]="!fgLogin.valid" (click)="register()"> Se connecter </button>
+        <div class="footer">
+          <span> Déja un compte ? </span>
+          <a [routerLink]="'/login'"> Connecte toi ici </a>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+</div>

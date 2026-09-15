@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+}
+
+.label{
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  height: 40px;
+  background-color: var(--color-bg-field);
+  padding-inline: 10px;
+}
+
+input.invalid {
+  border-color: var(--color-status-refusee, #BE5C4E);
+}

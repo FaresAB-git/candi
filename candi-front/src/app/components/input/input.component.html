@@ -1,0 +1,13 @@
+<div class="container">
+  @if (label()) {
+    <label>{{ label() }}</label>
+  }
+  <input
+    [type]="type()"
+    [value]="value"
+    [disabled]="disabled"
+    [class.invalid]="isInvalid"
+    (input)="handleInput($event)"
+    (blur)="handleBlur()"
+  />
+</div>
