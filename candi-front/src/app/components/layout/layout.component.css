@@ -1,0 +1,24 @@
+.layout {
+  display: flex;
+  height: 100vh;
+  background-color: var(--color-bg-page);
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .content {
+    padding: 16px;
+  }
+}

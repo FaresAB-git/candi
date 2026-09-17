@@ -5,5 +5,5 @@ import {Injectable} from '@angular/core';
 export abstract class BaseService {
   protected readonly apiUrl = 'http://localhost:9090/api';
 
-  constructor(protected http: HttpClient) {}
+  protected constructor(protected http: HttpClient) {}
 }

@@ -1,1 +1,83 @@
-<p>candidature works!</p>
+<div class="page">
+  <div class="page-header">
+    <div class="header-text">
+      <h1>Toutes mes candidatures</h1>
+      <p>{{ candidatures().length }} candidatures · {{ entretiensEnCours() }} entretiens en cours</p>
+    </div>
+
+    <div class="header-actions">
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Rechercher une entreprise..."
+          (input)="onSearchChange($event)"
+        />
+      </div>
+      <app-button variant="primary">+ Nouvelle candidature</app-button>
+    </div>
+  </div>
+
+  <div class="filters-row">
+    <div class="filters">
+      @for (filter of filters(); track filter.value) {
+        <button
+          class="filter-chip"
+          [class.active]="activeFilter() === filter.value"
+          (click)="setFilter(filter.value)"
+        >
+          {{ filter.label }}
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (candiRessource.isLoading()) {
+    <p class="loading">Chargement...</p>
+  } @else if (candiRessource.error()) {
+    <p class="error">Erreur lors du chargement des candidatures</p>
+  } @else if (filteredCandidatures().length === 0) {
+    <p class="empty">Aucune candidature trouvée</p>
+  } @else {
+
+    <div class="table-view">
+      <div class="table-header">
+        <span>Entreprise</span>
+        <span>Poste</span>
+        <span>Statut</span>
+        <span>Envoyée le</span>
+        <span></span>
+      </div>
+
+      @for (candi of filteredCandidatures(); track candi.id) {
+        <div class="table-row">
+          <div class="cell-entreprise">
+            <span class="avatar">{{ getInitial(candi.entreprise) }}</span>
+            <span class="entreprise-name">{{ candi.entreprise }}</span>
+          </div>
+          <span class="poste">{{ candi.poste }}</span>
+          <span class="statut-badge" [class]="statutClasses[candi.status]">
+            <span class="dot"></span>
+            {{ statutLabels[candi.status] }}
+          </span>
+          <span class="date">{{ candi.dateCandidature | date: 'dd.MM.yy' }}</span>
+          <a class="modifier-link">Modifier</a>
+        </div>
+      }
+    </div>
+
+    <div class="card-view">
+      @for (candi of filteredCandidatures(); track candi.id) {
+        <div class="candi-card">
+          <div class="card-main">
+            <span class="card-title">{{ candi.entreprise }} · {{ candi.poste }}</span>
+            <span class="card-date">{{ candi.dateCandidature | date: 'dd MMM' }}</span>
+          </div>
+          <span class="statut-badge" [class]="statutClasses[candi.status]">
+            <span class="dot"></span>
+            {{ statutLabels[candi.status] }}
+          </span>
+        </div>
+      }
+    </div>
+  }
+</div>

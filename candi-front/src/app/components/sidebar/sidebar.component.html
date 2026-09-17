@@ -1,0 +1,35 @@
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-icon"></div>
+    <span class="brand-name">Candidatures</span>
+  </div>
+
+  <nav class="nav-main">
+    @for (item of mainNavItems; track item.label) {
+      <div class="nav-item" [class.active]="item.label === activeItem">
+        <span>{{ item.label }}</span>
+        @if (item.count !== undefined) {
+          <span class="count">{{ item.count }}</span>
+        }
+      </div>
+    }
+  </nav>
+
+  <div class="nav-section-label">Outils</div>
+
+  <nav class="nav-outils">
+    @for (item of outilsNavItems; track item.label) {
+      <div class="nav-item">
+        <span>{{ item.label }}</span>
+      </div>
+    }
+  </nav>
+
+  <div class="user-footer">
+    <div class="avatar">AB</div>
+    <div class="user-info">
+      <span class="user-name">Alex B.</span>
+      <span class="user-email">alex&#64;mail.com</span>
+    </div>
+  </div>
+</aside>
