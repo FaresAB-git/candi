@@ -5,6 +5,7 @@ import { CandidatureService } from '../../base/service/candidature.service';
 import { UtilisateurService } from '../../base/service/utilisateur.service';
 import { StatutCandidature } from '../../base/mapping/candidature.mapping';
 import { ButtonComponent } from '../../components/button/button.component';
+import {Router} from '@angular/router';
 
 interface StatutFilter {
   value: StatutCandidature | 'TOUTES';
@@ -21,9 +22,10 @@ interface StatutFilter {
 export class CandidatureComponent {
   candidatureService = inject(CandidatureService);
   userService = inject(UtilisateurService);
+  private router = inject(Router);
 
   candiRessource = rxResource({
-    loader: () => this.candidatureService.getCandidatures()
+    loader: () => this.candidatureService.getAll()
   });
 
   candidatures = computed(() => this.candiRessource.value() ?? []);
@@ -94,4 +96,13 @@ export class CandidatureComponent {
   getInitial(entreprise: string): string {
     return entreprise.charAt(0).toUpperCase();
   }
+
+  goToNouvelle(): void {
+    this.router.navigate(['/candidatures/nouvelle']);
+  }
+
+  goToModifier(id: number): void {
+    this.router.navigate(['/candidatures', id]);
+  }
+
 }

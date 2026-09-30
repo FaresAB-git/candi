@@ -1,8 +1,10 @@
+// candidatures/candidature.service.ts
 import { Injectable } from '@angular/core';
-import { BaseService } from '../entity/beseService';
-import { CandidatureRequest, CandidatureResponse } from '../mapping/candidature.mapping';
-import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import {CandidatureRequest, CandidatureResponse} from '../mapping/candidature.mapping';
+import {BaseService} from '../entity/beseService';
+
 
 @Injectable({ providedIn: 'root' })
 export class CandidatureService extends BaseService {
@@ -12,23 +14,34 @@ export class CandidatureService extends BaseService {
     super(http);
   }
 
-  getCandidatures(): Observable<CandidatureResponse[]> {
+  getAll(): Observable<CandidatureResponse[]> {
     return this.http.get<CandidatureResponse[]>(this.baseUrl);
   }
 
-  getCandidature(id: string): Observable<CandidatureResponse> {
+  getById(id: number): Observable<CandidatureResponse> {
     return this.http.get<CandidatureResponse>(`${this.baseUrl}/${id}`);
   }
 
-  createCandidature(request: CandidatureRequest): Observable<CandidatureResponse> {
+  create(request: CandidatureRequest): Observable<CandidatureResponse> {
     return this.http.post<CandidatureResponse>(this.baseUrl, request);
   }
 
-  updateCandidature(id: number, request: CandidatureRequest): Observable<CandidatureResponse> {
+  update(id: number, request: CandidatureRequest): Observable<CandidatureResponse> {
     return this.http.put<CandidatureResponse>(`${this.baseUrl}/${id}`, request);
   }
 
-  deleteCandidature(id: number): Observable<void> {
+  delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  uploadCv(id: number, file: File): Observable<CandidatureResponse> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<CandidatureResponse>(`${this.baseUrl}/${id}/cv`, formData);
+  }
+
+  // Endpoint de génération IA à brancher une fois disponible côté back
+  genererCv(id: number): Observable<CandidatureResponse> {
+    return this.http.post<CandidatureResponse>(`${this.baseUrl}/${id}/cv/generate`, {});
   }
 }

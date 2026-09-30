@@ -13,7 +13,7 @@
           (input)="onSearchChange($event)"
         />
       </div>
-      <app-button variant="primary">+ Nouvelle candidature</app-button>
+      <app-button variant="primary" (clicked)="goToNouvelle()">+ Nouvelle candidature</app-button>
     </div>
   </div>
 
@@ -60,7 +60,7 @@
             {{ statutLabels[candi.status] }}
           </span>
           <span class="date">{{ candi.dateCandidature | date: 'dd.MM.yy' }}</span>
-          <a class="modifier-link">Modifier</a>
+          <a class="modifier-link" (click)="goToModifier(candi.id)">Modifier</a>
         </div>
       }
     </div>

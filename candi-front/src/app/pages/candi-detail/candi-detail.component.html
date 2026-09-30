@@ -1,0 +1,112 @@
+<div class="page">
+  <div class="breadcrumb">
+    <a routerLink="/candidatures">Candidatures</a>
+    @if (isEditMode()) {
+      <span> / {{ form.value.entreprise }}</span>
+    }
+  </div>
+
+  <div class="page-header">
+    <h1>{{ isEditMode() ? 'Modifier la candidature' : 'Nouvelle candidature' }}</h1>
+
+    @if (isEditMode()) {
+      <div class="header-actions">
+        @if (candidatureResource.value(); as candi) {
+          <span class="date-creation">Créée le {{ candi.dateCreation | date: 'dd.MM.yy' }}</span>
+        }
+        <button class="btn-delete" (click)="onDelete()">Supprimer</button>
+      </div>
+    }
+  </div>
+
+  @if (errorMessage()) {
+    <div class="error-banner">{{ errorMessage() }}</div>
+  }
+
+  <div class="content-grid">
+    <form class="form-panel" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <span class="section-label">L'offre</span>
+
+      <div class="row-2">
+        <app-input formControlName="entreprise" label="Entreprise" />
+        <app-input formControlName="poste" label="Poste" />
+      </div>
+
+      <app-input formControlName="lienOffre" label="Lien de l'offre" />
+
+      <label class="field-label">Description de l'offre</label>
+      <textarea formControlName="description" rows="4" class="textarea"></textarea>
+
+      <hr />
+
+      <span class="section-label">Suivi</span>
+
+      <label class="field-label">Statut</label>
+      <div class="statut-chips">
+        @for (option of statutOptions; track option.value) {
+          <button
+            type="button"
+            class="chip"
+            [class.active]="form.value.status === option.value"
+            (click)="setStatut(option.value)"
+          >
+            {{ option.label }}
+          </button>
+        }
+      </div>
+
+      <div class="row-2">
+        <app-input formControlName="dateCandidature" type="date" label="Date d'envoi" />
+      </div>
+
+      <label class="field-label">Notes</label>
+      <textarea formControlName="notes" rows="4" class="textarea"></textarea>
+
+      <div class="form-footer">
+        <span class="autosave-hint"></span>
+        <div class="form-buttons">
+          <app-button variant="neutral" type="button" (clicked)="onCancel()">Annuler</app-button>
+          <app-button variant="primary" type="submit" [disabled]="saving()">
+            {{ isEditMode() ? 'Enregistrer les modifications' : 'Créer la candidature' }}
+          </app-button>
+        </div>
+      </div>
+    </form>
+
+    <div class="ai-panel">
+      <h3>Adapter mon CV à l'offre</h3>
+
+      @if (!hasCvBase()) {
+        <p class="ai-warning">
+          Tu n'as pas encore ajouté de CV de base.
+          <a routerLink="/profil">Ajoute-le depuis ton profil</a> pour pouvoir générer une version adaptée.
+        </p>
+      } @else if (!isEditMode()) {
+        <p class="ai-info">Enregistre d'abord la candidature pour pouvoir générer un CV adapté.</p>
+      } @else {
+        <p class="ai-description">
+          Génère une version de ton CV adaptée à la description de l'offre saisie à gauche.
+        </p>
+
+        <app-button
+          variant="accent"
+          type="button"
+          [disabled]="generatingCv() || !form.value.description"
+          (clicked)="onGenererCv()"
+        >
+          {{ generatingCv() ? 'Génération en cours...' : 'Générer la version adaptée' }}
+        </app-button>
+
+        @if (cvGenereUrl()) {
+          <div class="cv-result">
+            <span class="cv-result-label">Dernier CV généré</span>
+            <div class="cv-result-actions">
+              <a [href]="cvGenereUrl()!" target="_blank">Voir le CV</a>
+              <a [href]="cvGenereUrl()!" download>Télécharger</a>
+            </div>
+          </div>
+        }
+      }
+    </div>
+  </div>
+</div>
